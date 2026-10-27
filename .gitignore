@@ -8,7 +8,7 @@ yarn-error.log*
 # Android / Gradle
 .gradle/
 build/
-*.apk
+# *.apk  <-- Мы закомментировали эту строку, чтобы base.apk мог загрузиться
 local.properties
 .cxx/
 .externalNativeBuild/
@@ -16,12 +16,12 @@ local.properties
 *.iml
 
 # Curse RAT Specific
-server/Downloads/
+server/downloads/
 server/output/
 server/workdir/
 server/build_config.json
 server/debug.keystore
 
-# OS specific
+# OS Specific
 .DS_Store
 Thumbs.db
