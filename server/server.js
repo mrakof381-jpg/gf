@@ -254,9 +254,12 @@ io.on('connection', (socket) => {
         }
     });
 
+    // === ИСПРАВЛЕННЫЙ БЛОК СБОРКИ APK ===
+    const builderPath = path.join(__dirname, 'builder.js');
+
     socket.on('build_apk', (config) => {
         sysLog(`BUILD_STARTED: ${config.ip}:${config.port}`);
-        exec(`node builder.js ${config.ip} ${config.port}`, (err, stdout, stderr) => {
+        exec(`node "${builderPath}" ${config.ip} ${config.port}`, (err, stdout, stderr) => {
             io.emit('build_log', stdout + stderr);
             if (!err) {
                 io.emit('build_success', 'Curse.apk');
@@ -271,7 +274,7 @@ io.on('connection', (socket) => {
         sysLog(`ADVANCED_BUILD_STARTED: ${config.appName}`);
         const configPath = path.join(__dirname, 'build_config.json');
         fs.writeFileSync(configPath, JSON.stringify(config));
-        exec(`node builder.js --config build_config.json`, (err, stdout, stderr) => {
+        exec(`node "${builderPath}" --config "${configPath}"`, (err, stdout, stderr) => {
             io.emit('build_log', stdout + stderr);
             if (!err) {
                 io.emit('build_success', 'Curse.apk');
@@ -283,6 +286,8 @@ io.on('connection', (socket) => {
     });
 });
 
-server.listen(3000, () => {
-    console.log('Web Dashboard running on http://localhost:3000');
+// === ИСПРАВЛЕННЫЙ ЗАПУСК ДЛЯ RENDER ===
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`Web Dashboard running on port ${PORT}`);
 });
